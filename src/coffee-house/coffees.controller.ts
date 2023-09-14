@@ -8,24 +8,27 @@ import {
   Post,
 } from '@nestjs/common';
 import { CreateCoffeeDto } from './dtos/dtos';
+import { CoffeesService } from './coffees.service';
 
 @Controller('coffees')
 export class CoffeesController {
+  constructor(private coffeesService: CoffeesService) {}
+
   @Get()
   @HttpCode(HttpStatus.OK)
   getAllCoffees() {
-    return 'all my coffees';
+    return this.coffeesService.getAllCoffees();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.FOUND)
   getCooffeeById(@Param('id') id: string) {
-    return `coffee with id: ${id}`;
+    return this.coffeesService.getCoffeeById(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  saveNewCoffee(@Body() createCoffee: CreateCoffeeDto) {
-    return createCoffee;
+  saveNewCoffee(@Body() coffee: CreateCoffeeDto) {
+    return this.coffeesService.saveNewCoffee(coffee);
   }
 }

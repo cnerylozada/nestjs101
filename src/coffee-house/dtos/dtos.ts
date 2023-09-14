@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateCoffeeDto {
   @IsString()
@@ -9,4 +16,7 @@ export class CreateCoffeeDto {
   @MinLength(20)
   @MaxLength(50)
   description: string;
+
+  @IsNumber()
+  price: number;
 }
