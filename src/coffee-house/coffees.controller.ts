@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Delete,
 } from '@nestjs/common';
 import { CreateCoffeeDto } from './dtos/dtos';
 import { CoffeesService } from './coffees.service';
@@ -30,5 +31,11 @@ export class CoffeesController {
   @HttpCode(HttpStatus.CREATED)
   saveNewCoffee(@Body() coffee: CreateCoffeeDto) {
     return this.coffeesService.saveNewCoffee(coffee);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.FOUND)
+  deleteCoffeeById(@Param('id') id: string) {
+    return this.coffeesService.deleteCoffeeById(id);
   }
 }

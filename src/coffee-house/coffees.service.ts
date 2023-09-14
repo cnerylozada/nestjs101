@@ -26,4 +26,9 @@ export class CoffeesService {
     newCoffee.price = coffee.price;
     return this.coffeesRepository.save(newCoffee);
   }
+
+  async deleteCoffeeById(id: string) {
+    await this.coffeesRepository.delete({ id });
+    return id;
+  }
 }
