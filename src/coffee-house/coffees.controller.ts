@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CreateCoffeeDto } from './dtos/dtos';
 import { CoffeesService } from './coffees.service';
@@ -17,8 +18,9 @@ export class CoffeesController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAllCoffees() {
-    return this.coffeesService.getAllCoffees();
+  getAllCoffees(@Query() paginationQuery: { page: number; limit: number }) {
+    const { page, limit } = paginationQuery;
+    return this.coffeesService.getAllCoffees(page, limit);
   }
 
   @Get(':id')

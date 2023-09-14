@@ -11,8 +11,11 @@ export class CoffeesService {
     private coffeesRepository: Repository<Coffee>,
   ) {}
 
-  getAllCoffees() {
-    return this.coffeesRepository.find();
+  getAllCoffees(page: number, limit = 5) {
+    return this.coffeesRepository.find({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
   }
 
   getCoffeeById(id: string) {
