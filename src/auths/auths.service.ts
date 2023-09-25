@@ -13,6 +13,13 @@ export class AuthsService {
     private jwtService: JwtService,
   ) {}
 
+  async signUp(username: string, password: string) {
+    const auth = new Auth();
+    auth.username = username;
+    auth.password = await hash(password, 10);
+    return this.authsRepository.save(auth);
+  }
+
   async signIn(username: string, password: string) {
     const auth = await this.authsRepository.findOneBy({
       username,
@@ -29,10 +36,7 @@ export class AuthsService {
     };
   }
 
-  async signUp(username: string, password: string) {
-    const auth = new Auth();
-    auth.username = username;
-    auth.password = await hash(password, 10);
-    return this.authsRepository.save(auth);
+  async getAllAuths() {
+    return this.authsRepository.find();
   }
 }

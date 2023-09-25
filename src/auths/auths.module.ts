@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Auth } from './auth.entity';
 import { AuthsService } from './auths.service';
-import { LocalStrategy } from './local.strategy';
-import { PassportModule } from '@nestjs/passport';
 import { AuthsController } from './auths.controller';
+import { Module } from '@nestjs/common';
+import { LocalStrategy } from './local.strategy';
+import { JwtStrategy } from './jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './helpers';
 
@@ -17,7 +18,7 @@ import { jwtConstants } from './helpers';
     }),
     TypeOrmModule.forFeature([Auth]),
   ],
-  providers: [AuthsService, LocalStrategy],
+  providers: [AuthsService, LocalStrategy, JwtStrategy],
   controllers: [AuthsController],
 })
 export class AuthsModule {}
