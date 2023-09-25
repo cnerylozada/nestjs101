@@ -13,7 +13,7 @@ export class Auth {
   id: string;
 
   @Column({ unique: true })
-  email: string;
+  username: string;
 
   @Column()
   password: string;

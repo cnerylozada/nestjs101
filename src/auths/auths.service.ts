@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Auth } from './auth.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { compare, hash } from 'bcrypt';
 
 @Injectable()
@@ -11,21 +11,19 @@ export class AuthsService {
     private authsRepository: Repository<Auth>,
   ) {}
 
-  async signIn(email: string, password: string) {
-    const user = await this.authsRepository.findOneBy({ email });
-    if (!!user) {
-      const isValidPassword = await compare(password, user.password);
-      if (isValidPassword) {
-        return 'token';
-      }
-    }
-    return 'user not found';
+  async signIn(username: string, password: string) {
+    const auth = await this.authsRepository.findOneBy({
+      username,
+    });
+    if (!auth) return null;
+    const isValidPassword = await compare(password, auth.password);
+    return isValidPassword ? 'token' : null;
   }
 
-  async signUp(email: string, password: string) {
-    const user = new Auth();
-    user.email = email;
-    user.password = await hash(password, 10);
-    return this.authsRepository.save(user);
+  async signUp(username: string, password: string) {
+    const auth = new Auth();
+    auth.username = username;
+    auth.password = await hash(password, 10);
+    return this.authsRepository.save(auth);
   }
 }
