@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Coffee } from './entities/Coffee.entity';
 import { Repository } from 'typeorm';
-import { CreateCoffeeDto } from './dtos/dtos';
+import { CreateCoffeeDto, UpdateCoffeeDto } from './dtos';
 
 @Injectable()
 export class CoffeesService {
@@ -19,19 +19,24 @@ export class CoffeesService {
   }
 
   getCoffeeById(id: string) {
-    return this.coffeesRepository.findOneBy({ id });
+    return this.coffeesRepository.findOneBy({ id: +id });
   }
 
   saveNewCoffee(coffee: CreateCoffeeDto) {
-    const newCoffee = new Coffee();
-    newCoffee.name = coffee.name;
-    newCoffee.description = coffee.description;
-    newCoffee.price = coffee.price;
+    const newCoffee = this.coffeesRepository.create(coffee);
     return this.coffeesRepository.save(newCoffee);
   }
 
+  async updateCoffee(id: string, editedCoffee: UpdateCoffeeDto) {
+    const coffee = await this.coffeesRepository.preload({
+      id: +id,
+      ...editedCoffee,
+    });
+    return this.coffeesRepository.save(coffee);
+  }
+
   async deleteCoffeeById(id: string) {
-    await this.coffeesRepository.delete({ id });
+    await this.coffeesRepository.delete({ id: +id });
     return id;
   }
 }
