@@ -4,6 +4,7 @@ import { databaseConfig } from './typeorm.config';
 import { UsersModule } from './users/users.module';
 import { CoffeeHouseModule } from './coffee-house/coffee-house.module';
 import { AuthsModule } from './auths/auths.module';
+import { S3Module } from './s3/s3.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { AuthsModule } from './auths/auths.module';
     UsersModule,
     CoffeeHouseModule,
     AuthsModule,
+    S3Module,
   ],
   controllers: [],
   providers: [],
