@@ -4,17 +4,20 @@ import {
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class BucketsService {
   private bucket = 'nestjs101-s3';
   private s3Client = new S3Client({
-    region: 'us-east-1',
+    region: this.configService.get('aws.region'),
     credentials: {
-      accessKeyId: 'AKIARZCWO7OIKS4RRPF4',
-      secretAccessKey: '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',
+      accessKeyId: this.configService.get('aws.accessKey'),
+      secretAccessKey: this.configService.get('aws.secretAccessKey'),
     },
   });
+
+  constructor(private configService: ConfigService) {}
 
   async uploadFile(fileNameWithExtension: string, fileBuffer: Buffer) {
     const extensionIndex = fileNameWithExtension.lastIndexOf('.');
