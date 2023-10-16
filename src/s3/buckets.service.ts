@@ -16,7 +16,7 @@ export class BucketsService {
     },
   });
 
-  async upload(fileNameWithExtension: string, file: Buffer) {
+  async uploadFile(fileNameWithExtension: string, fileBuffer: Buffer) {
     const extensionIndex = fileNameWithExtension.lastIndexOf('.');
     const extension = fileNameWithExtension.slice(extensionIndex + 1);
     const fileName = `avatar_${Date.now()}`;
@@ -25,7 +25,18 @@ export class BucketsService {
       new PutObjectCommand({
         Bucket: this.bucket,
         Key: key,
-        Body: file,
+        Body: fileBuffer,
+      }),
+    );
+    return `https://${this.bucket}.s3.amazonaws.com/${key}`;
+  }
+
+  async updateFile(key: string, fileBuffer: Buffer) {
+    await this.s3Client.send(
+      new PutObjectCommand({
+        Bucket: this.bucket,
+        Key: key,
+        Body: fileBuffer,
       }),
     );
     return `https://${this.bucket}.s3.amazonaws.com/${key}`;
