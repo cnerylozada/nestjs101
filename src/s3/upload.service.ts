@@ -7,18 +7,15 @@ export class UploadService {
   private s3Client = new S3Client({
     region: 'us-east-1',
     credentials: {
-      accessKeyId: 'AKIARZCWO7OIH3VQYOIJ',
-      secretAccessKey: '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',
+      accessKeyId: 'AKIARZCWO7OIKS4RRPF4',
+      secretAccessKey: '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',
     },
   });
 
   async upload(fileNameWithExtension: string, file: Buffer) {
     const extensionIndex = fileNameWithExtension.lastIndexOf('.');
     const extension = fileNameWithExtension.slice(extensionIndex + 1);
-    const fileName = `${fileNameWithExtension.substring(
-      0,
-      extensionIndex,
-    )}_${Date.now()}`;
+    const fileName = `avatar_${Date.now()}`;
     const key = `images/${fileName}.${extension}`;
     await this.s3Client.send(
       new PutObjectCommand({
