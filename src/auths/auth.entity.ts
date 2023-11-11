@@ -22,3 +22,8 @@ export class Auth {
   // @JoinColumn()
   // user: User;
 }
+
+export interface IPayload {
+  username: string;
+  sub: string;
+}

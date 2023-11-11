@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Auth } from './auth.entity';
+import { Auth, IPayload } from './auth.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -30,7 +30,7 @@ export class AuthsService {
   }
 
   async getAccessToken(auth: Auth) {
-    const payload = { username: auth.username, sub: auth.id };
+    const payload: IPayload = { username: auth.username, sub: auth.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
