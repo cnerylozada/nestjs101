@@ -28,6 +28,6 @@ export class AuthsController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAllAuths() {
-    return this.authsService.getAllAuths();
+    // return this.authsService.getAllAuths();
   }
 }

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
 import { CoffeeHouseModule } from './coffee-house/coffee-house.module';
 import { AuthsModule } from './auths/auths.module';
 import { S3Module } from './s3/s3.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -29,10 +29,10 @@ import configuration from './config/configuration';
       },
       inject: [ConfigService],
     }),
-    UsersModule,
     CoffeeHouseModule,
     AuthsModule,
     S3Module,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

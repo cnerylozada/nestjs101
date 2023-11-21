@@ -1,16 +1,16 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'users' })
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  firstName: string;
+  @Column({ unique: true })
+  username: string;
 
-  @Column({
-    type: 'timestamp with time zone',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
+  @Column()
+  password: string;
+
+  @Column({ nullable: true })
+  refreshToken?: string;
 }
