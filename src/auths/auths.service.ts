@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
@@ -14,7 +18,6 @@ export class AuthsService {
   ) {}
 
   async getTokens(userId: number, username: string) {
-    console.log('service', this.configService.get('secrets.token'));
     const accessToken = await this.jwtService.signAsync(
       { sub: userId, username },
       { secret: this.configService.get('secrets.token'), expiresIn: '1m' },
@@ -53,6 +56,16 @@ export class AuthsService {
     if (!isValidPassword)
       throw new BadRequestException('Password is incorrect');
     const tokens = await this.getTokens(user.id, username);
+    await this.updateRefreshToken(user.id, tokens.refreshToken);
+    return tokens;
+  }
+
+  async refreshTokens(userId: string, refreshToken: string) {
+    const [user] = await this.usersService.getUserById(userId);
+    const isValidRefreshToken = await compare(refreshToken, user.refreshToken);
+    if (!isValidRefreshToken)
+      throw new ForbiddenException('Refresh token is invalid');
+    const tokens = await this.getTokens(user.id, user.username);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }
