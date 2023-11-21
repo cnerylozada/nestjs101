@@ -19,6 +19,10 @@ export class UsersService {
     return this.usersRepository.findBy({ id: +id });
   }
 
+  getUserByUsername(username: string) {
+    return this.usersRepository.findBy({ username });
+  }
+
   saveUser(user: CreateUserDto) {
     const newUser = this.usersRepository.create(user);
     return this.usersRepository.save(newUser);

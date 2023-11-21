@@ -21,12 +21,17 @@ export class CreateUserDto {
 export class UpdateUserDto {
   @IsOptional()
   @IsString()
+  @IsString()
   @MinLength(10)
   @MaxLength(20)
-  username: string;
+  username?: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  password: string;
+  password?: string;
+
+  @IsString()
+  @IsString()
+  refreshToken?: string;
 }
