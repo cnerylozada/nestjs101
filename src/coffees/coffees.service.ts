@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Coffee } from './entities/Coffee.entity';
+import { Coffee } from './coffees.entity';
 import { Repository } from 'typeorm';
 import { CreateCoffeeDto, UpdateCoffeeDto } from './dtos';
 
@@ -18,8 +18,10 @@ export class CoffeesService {
     });
   }
 
-  getCoffeeById(id: string) {
-    return this.coffeesRepository.findOneBy({ id: +id });
+  async getCoffeeById(id: string) {
+    const coffee = await this.coffeesRepository.findOneBy({ id: +id });
+    if (!coffee) throw new NotFoundException(`Not found coffee with id: ${id}`);
+    return coffee;
   }
 
   saveNewCoffee(coffee: CreateCoffeeDto) {

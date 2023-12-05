@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CoffeeHouseModule } from './coffee-house/coffee-house.module';
+import { CoffeeHouseModule } from './coffees/coffee-house.module';
 import { AuthsModule } from './auths/auths.module';
 import { S3Module } from './s3/s3.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
