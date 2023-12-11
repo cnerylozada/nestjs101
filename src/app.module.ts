@@ -5,6 +5,7 @@ import { AuthsModule } from './auths/auths.module';
 import { S3Module } from './s3/s3.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
+import { QuizzesModule } from './quizzes/quizzes.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -33,6 +34,7 @@ import configuration from './config/configuration';
     AuthsModule,
     S3Module,
     UsersModule,
+    QuizzesModule,
   ],
   controllers: [],
   providers: [],
