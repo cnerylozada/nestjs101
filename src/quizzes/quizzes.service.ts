@@ -3,15 +3,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Quiz } from './quizzes.entity';
 import { Repository } from 'typeorm';
 import { CreateQuizDto } from './dtos';
+import { QuestionsService } from 'src/questions/questions.service';
 
 @Injectable()
 export class QuizzesService {
   constructor(
     @InjectRepository(Quiz) private quizzesRepository: Repository<Quiz>,
+    private questionsService: QuestionsService,
   ) {}
 
   getAllQuizzes() {
-    return this.quizzesRepository.find();
+    return this.quizzesRepository.find({ relations: ['questionsWithPoints'] });
   }
 
   async getQuizById(id: number) {
@@ -19,8 +21,16 @@ export class QuizzesService {
     return quiz;
   }
 
-  saveQuiz(quiz: CreateQuizDto) {
-    const newQuiz = this.quizzesRepository.create(quiz);
+  async saveQuiz(quizDto: CreateQuizDto) {
+    const questionsWithPoints = await Promise.all(
+      quizDto.questions.map((_) =>
+        this.questionsService.preloadQuestionsWithPoints(_),
+      ),
+    );
+    const newQuiz = this.quizzesRepository.create({
+      ...quizDto,
+      questionsWithPoints,
+    });
     return this.quizzesRepository.save(newQuiz);
   }
 }

@@ -1,22 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Question } from './questions.entity';
+import { Question, QuestionWithPoints } from './questions.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateQuestionDto } from './dtos';
+import { CreateQuestionDto, CreateQuestionWithPointsDto } from './dtos';
 
 @Injectable()
 export class QuestionsService {
   constructor(
     @InjectRepository(Question)
     private questionsRepository: Repository<Question>,
+    @InjectRepository(QuestionWithPoints)
+    private questionsWithPointsRepository: Repository<QuestionWithPoints>,
   ) {}
 
   getQuestions() {
-    return this.questionsRepository.find()
+    return this.questionsRepository.find();
   }
 
   saveQuestion(newQuestion: CreateQuestionDto) {
     const question = this.questionsRepository.create(newQuestion);
     return this.questionsRepository.save(question);
+  }
+
+  async preloadQuestionsWithPoints(
+    questionWithPoints: CreateQuestionWithPointsDto,
+  ) {
+    const existingQuestion = await this.questionsRepository.findOne({
+      where: {
+        question: questionWithPoints.question,
+      },
+    });
+    return this.questionsWithPointsRepository.create({
+      points: questionWithPoints.points,
+      question: existingQuestion,
+    });
   }
 }
