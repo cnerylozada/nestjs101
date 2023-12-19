@@ -30,9 +30,18 @@ export class QuestionsService {
         question: questionWithPoints.question,
       },
     });
+    if (existingQuestion) {
+      return this.questionsWithPointsRepository.create({
+        points: questionWithPoints.points,
+        question: existingQuestion,
+      });
+    }
+    const newQuestion = await this.saveQuestion({
+      question: questionWithPoints.question,
+    });
     return this.questionsWithPointsRepository.create({
       points: questionWithPoints.points,
-      question: existingQuestion,
+      question: newQuestion,
     });
   }
 }
