@@ -13,7 +13,9 @@ export class QuizzesService {
   ) {}
 
   getAllQuizzes() {
-    return this.quizzesRepository.find({ relations: ['questionsWithPoints'] });
+    return this.quizzesRepository.find({
+      relations: ['questionsWithPoints', 'questionsWithPoints.question'],
+    });
   }
 
   async getQuizById(id: number) {
