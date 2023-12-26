@@ -7,12 +7,12 @@ export class QuestionsController {
   constructor(private questionsService: QuestionsService) {}
 
   @Get()
-  getAllQuestions(){
-    return this.questionsService.getQuestions()
+  getAllQuestions() {
+    return this.questionsService.getQuestions();
   }
 
   @Post()
-  saveQuestion(@Body() newQuestion: CreateQuestionDto){
-    return this.questionsService.saveQuestion(newQuestion)
+  saveQuestion(@Body() newQuestion: CreateQuestionDto) {
+    return this.questionsService.saveQuestion(newQuestion);
   }
 }

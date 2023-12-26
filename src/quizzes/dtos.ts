@@ -30,5 +30,19 @@ export class CreateQuizDto {
   @ArrayMinSize(1)
   @Type(() => CreateQuestionWithPointsDto)
   @ValidateNested({ each: true })
-  questions: CreateQuestionWithPointsDto[]
+  questions: CreateQuestionWithPointsDto[];
+}
+
+export class UpdateQuizDto {
+  @IsOptional()
+  @IsString()
+  @MinLength(10)
+  @MaxLength(30)
+  title: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(10)
+  @MaxLength(30)
+  description: string;
 }

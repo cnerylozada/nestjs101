@@ -10,7 +10,7 @@ export class Quiz {
   title: string;
 
   @Column({ nullable: true })
-  description: string;
+  description?: string;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   creationDate?: Date;

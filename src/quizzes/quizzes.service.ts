@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Quiz } from './quizzes.entity';
 import { Repository } from 'typeorm';
-import { CreateQuizDto } from './dtos';
+import { CreateQuizDto, UpdateQuizDto } from './dtos';
 import { QuestionsService } from 'src/questions/questions.service';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class QuizzesService {
   async saveQuiz(quizDto: CreateQuizDto) {
     const questionsWithPoints = await Promise.all(
       quizDto.questions.map((_) =>
-        this.questionsService.preloadQuestionsWithPoints(_),
+        this.questionsService.preloadQuestionWithPoints(_),
       ),
     );
     const newQuiz = this.quizzesRepository.create({
@@ -34,5 +34,13 @@ export class QuizzesService {
       questionsWithPoints,
     });
     return this.quizzesRepository.save(newQuiz);
+  }
+
+  async updateQuiz(quizId: string, quizDto: UpdateQuizDto) {
+    const quiz = await this.quizzesRepository.preload({
+      id: +quizId,
+      ...quizDto,
+    });
+    return this.quizzesRepository.save(quiz);
   }
 }

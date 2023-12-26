@@ -4,10 +4,11 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { QuizzesService } from './quizzes.service';
-import { CreateQuizDto } from './dtos';
+import { CreateQuizDto, UpdateQuizDto } from './dtos';
 
 @Controller('quizzes')
 export class QuizzesController {
@@ -26,5 +27,11 @@ export class QuizzesController {
   @Post()
   saveQuiz(@Body() newQuiz: CreateQuizDto) {
     return this.quizzesService.saveQuiz(newQuiz);
+  }
+
+  @Patch(':id')
+  updateQuiz(@Param('id') id: string, @Body() quiz: UpdateQuizDto) {
+    console.log('quiz controller', quiz);
+    return this.quizzesService.updateQuiz(id, quiz);
   }
 }

@@ -22,7 +22,7 @@ export class QuestionsService {
     return this.questionsRepository.save(question);
   }
 
-  async preloadQuestionsWithPoints(
+  async preloadQuestionWithPoints(
     questionWithPoints: CreateQuestionWithPointsDto,
   ) {
     const existingQuestion = await this.questionsRepository.findOne({
