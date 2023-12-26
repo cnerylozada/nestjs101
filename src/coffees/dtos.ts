@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsOptional,
   IsNotEmpty,
@@ -5,7 +6,17 @@ import {
   IsString,
   MaxLength,
   MinLength,
+  IsArray,
+  ArrayMinSize,
+  ValidateNested,
 } from 'class-validator';
+
+export class CreateFlavorDto {
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
+  flavor: string;
+}
 
 export class CreateCoffeeDto {
   @IsString()
@@ -19,6 +30,12 @@ export class CreateCoffeeDto {
 
   @IsNumber()
   price: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @ArrayMinSize(1)
+  @Type(() => CreateFlavorDto)
+  flavors: CreateFlavorDto[];
 }
 
 export class UpdateCoffeeDto {
@@ -36,4 +53,10 @@ export class UpdateCoffeeDto {
   @IsOptional()
   @IsNumber()
   price?: number;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateFlavorDto)
+  flavors?: CreateFlavorDto[];
 }

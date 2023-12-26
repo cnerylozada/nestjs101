@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('coffees')
 export class Coffee {
@@ -16,4 +22,19 @@ export class Coffee {
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @OneToMany(() => Flavor, (flavor) => flavor.coffee, { cascade: true })
+  flavors: Flavor[];
+}
+
+@Entity('flavors')
+export class Flavor {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  flavor: string;
+
+  @ManyToOne(() => Coffee, (coffee) => coffee.flavors)
+  coffee: Coffee;
 }
