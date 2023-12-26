@@ -38,11 +38,18 @@ export class UpdateQuizDto {
   @IsString()
   @MinLength(10)
   @MaxLength(30)
-  title: string;
+  title?: string;
 
   @IsOptional()
   @IsString()
   @MinLength(10)
   @MaxLength(30)
-  description: string;
+  description?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(1)
+  @Type(() => CreateQuestionWithPointsDto)
+  @ValidateNested({ each: true })
+  questions?: CreateQuestionWithPointsDto[];
 }

@@ -37,9 +37,15 @@ export class QuizzesService {
   }
 
   async updateQuiz(quizId: string, quizDto: UpdateQuizDto) {
+    const questionsWithPoints = await Promise.all(
+      quizDto.questions.map((_) =>
+        this.questionsService.preloadQuestionWithPoints(_),
+      ),
+    );
     const quiz = await this.quizzesRepository.preload({
       id: +quizId,
       ...quizDto,
+      questionsWithPoints,
     });
     return this.quizzesRepository.save(quiz);
   }

@@ -31,7 +31,6 @@ export class QuizzesController {
 
   @Patch(':id')
   updateQuiz(@Param('id') id: string, @Body() quiz: UpdateQuizDto) {
-    console.log('quiz controller', quiz);
     return this.quizzesService.updateQuiz(id, quiz);
   }
 }

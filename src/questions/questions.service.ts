@@ -36,6 +36,7 @@ export class QuestionsService {
         question: existingQuestion,
       });
     }
+
     const newQuestion = await this.saveQuestion({
       question: questionWithPoints.question,
     });
