@@ -35,6 +35,9 @@ export class Flavor {
   @Column()
   flavor: string;
 
-  @ManyToOne(() => Coffee, (coffee) => coffee.flavors)
+  @ManyToOne(() => Coffee, (coffee) => coffee.flavors, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   coffee: Coffee;
 }
