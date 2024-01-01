@@ -3,8 +3,6 @@ import {
   ArrayMinSize,
   IsArray,
   IsNotEmpty,
-  IsNotEmptyObject,
-  IsObject,
   IsOptional,
   IsString,
   MaxLength,

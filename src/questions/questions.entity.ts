@@ -29,9 +29,12 @@ export class QuestionWithPoints {
   @Column()
   points: number;
 
+  @ManyToOne(() => Quiz, (quiz) => quiz.questionsWithPoints, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
+  quiz: Quiz;
+
   @ManyToOne(() => Question, (question) => question.questionsWithPoints)
   question: Question;
-
-  @ManyToOne(() => Quiz, (quiz) => quiz.questionsWithPoints)
-  quiz: Quiz;
 }

@@ -24,6 +24,7 @@ export class QuestionsService {
 
   async preloadQuestionWithPoints(
     questionWithPoints: CreateQuestionWithPointsDto,
+    quizId?: string,
   ) {
     const existingQuestion = await this.questionsRepository.findOne({
       where: {
@@ -31,18 +32,33 @@ export class QuestionsService {
       },
     });
     if (existingQuestion) {
+      if (!!quizId) {
+        const existingQuestionWithPoints =
+          await this.questionsWithPointsRepository
+            .createQueryBuilder('qWPoints')
+            .where('qWPoints.quizId = :quizId', { quizId: +quizId })
+            .andWhere('qWPoints.questionId = :questionId', {
+              questionId: existingQuestion.id,
+            })
+            .getOne();
+        return this.questionsWithPointsRepository.create({
+          ...existingQuestionWithPoints,
+          points: questionWithPoints.points,
+        });
+      } else {
+        return this.questionsWithPointsRepository.create({
+          question: existingQuestion,
+          points: questionWithPoints.points,
+        });
+      }
+    } else {
+      const newQuestion = await this.questionsRepository.save({
+        question: questionWithPoints.question,
+      });
       return this.questionsWithPointsRepository.create({
         points: questionWithPoints.points,
-        question: existingQuestion,
+        question: newQuestion,
       });
     }
-
-    const newQuestion = await this.saveQuestion({
-      question: questionWithPoints.question,
-    });
-    return this.questionsWithPointsRepository.create({
-      points: questionWithPoints.points,
-      question: newQuestion,
-    });
   }
 }
