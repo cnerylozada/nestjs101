@@ -1,8 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Question, QuestionWithPoints } from './questions.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateQuestionDto, CreateQuestionWithPointsDto } from './dtos';
+import {
+  CreateQuestionDto,
+  CreateQuestionWithPointsDto,
+  UpdateQuestionDto,
+} from './dtos';
 
 @Injectable()
 export class QuestionsService {
@@ -45,12 +49,11 @@ export class QuestionsService {
           ...existingQuestionWithPoints,
           points: questionWithPoints.points,
         });
-      } else {
+      } else
         return this.questionsWithPointsRepository.create({
           question: existingQuestion,
           points: questionWithPoints.points,
         });
-      }
     } else {
       const newQuestion = await this.questionsRepository.save({
         question: questionWithPoints.question,
@@ -60,5 +63,15 @@ export class QuestionsService {
         question: newQuestion,
       });
     }
+  }
+
+  async updateQuestion(questionId: string, question: UpdateQuestionDto) {
+    const existingQuestion = await this.questionsRepository.preload({
+      id: +questionId,
+      question: question.question,
+    });
+    if (!existingQuestion)
+      throw new NotFoundException('Not found question with id ' + questionId);
+    return this.questionsRepository.save(existingQuestion);
   }
 }

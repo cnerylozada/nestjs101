@@ -1,6 +1,7 @@
 import {
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   Min,
   MinLength,
@@ -11,6 +12,14 @@ export class CreateQuestionDto {
   @IsNotEmpty()
   @MinLength(10)
   question: string;
+}
+
+export class UpdateQuestionDto {
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(10)
+  question?: string;
 }
 
 export class CreateQuestionWithPointsDto {
